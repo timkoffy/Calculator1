@@ -3,13 +3,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        var root = new NTree("+");
-        var left = new NTree("5");
-        var right = new NTree("/");
-        var left1 = new NTree("3");
-        var right1 = new NTree("+");
-        var left2 = new NTree("2");
-        var right2 = new NTree("2");
+        var root = new NTree(new AddOperator());
+        var left = new NTree(new NumbValue(5));
+        var right = new NTree(new DivOperator());
+        var left1 = new NTree(new NumbValue(3));
+        var right1 = new NTree(new AddOperator());
+        var left2 = new NTree(new NumbValue(2));
+        var right2 = new NTree(new NumbValue(2));
         
         root.AddLeft(left);
         root.AddRight(right);
