@@ -20,6 +20,7 @@ public class Parser
         return false;
     }
     
+    private char Current => _pos < _expression.Length ? _expression[_pos] : '\0';
     private void Next() => _pos++;
     
     private NTree ParseExpression() => ParseExpr();
@@ -41,6 +42,16 @@ public class Parser
 
     private NTree ParseNumber()
     {
+        int start = _pos;
+
+        while (char.IsDigit(Current) || Current == '.')
+            Next();
+
+        if (start == _pos) throw new Exception("кривое выражение");
         
+        double value = double.Parse(_expression.Substring(start, _pos - start), System.Globalization.CultureInfo.InvariantCulture);
+        var numb = new NTree(new NumbValue(value));
+        
+        return numb;
     }
 }
