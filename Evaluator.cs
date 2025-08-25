@@ -1,13 +1,13 @@
 namespace Calculator1;
 public class Evaluator
 {
-    public static double Evaluate(NTree node)
+    public static double EvaluatingRecursion(NTree node)
     {
         if (node.Left == null && node.Right == null)
             return node.Value.Evaluate();
         
-        double left = Evaluate(node.Left);
-        double right = Evaluate(node.Right);
+        double left = EvaluatingRecursion(node.Left);
+        double right = EvaluatingRecursion(node.Right);
 
         return node.Value.Evaluate(left, right);
     }

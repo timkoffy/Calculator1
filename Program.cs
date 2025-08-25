@@ -18,6 +18,6 @@ class Program
         right1.AddLeft(left2);
         right1.AddRight(right2);
         
-        Console.WriteLine(Evaluator.Evaluate(root));
+        Console.WriteLine(Evaluator.EvaluatingRecursion(root));
     }
 }
