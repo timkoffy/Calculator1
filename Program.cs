@@ -3,21 +3,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        var root = new NTree(new AddOperator());
-        var left = new NTree(new NumbValue(5));
-        var right = new NTree(new DivOperator());
-        var left1 = new NTree(new NumbValue(3));
-        var right1 = new NTree(new AddOperator());
-        var left2 = new NTree(new NumbValue(2));
-        var right2 = new NTree(new NumbValue(2));
-        
-        root.AddLeft(left);
-        root.AddRight(right);
-        right.AddLeft(left1);
-        right.AddRight(right1); 
-        right1.AddLeft(left2);
-        right1.AddRight(right2);
-        
+        string expression = Console.ReadLine();
+        var parser = new Parser(expression);
+        var root = parser.ParseExpression();
         Console.WriteLine(Evaluator.EvaluatingRecursion(root));
     }
 }

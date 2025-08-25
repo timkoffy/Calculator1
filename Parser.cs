@@ -5,7 +5,7 @@ public class Parser
     private readonly string _expression;
     private int _pos;
 
-    Parser(string expression)
+    public Parser(string expression)
     {
         _expression = expression.Replace(" ", "");
         _pos = 0;
@@ -13,8 +13,9 @@ public class Parser
 
     private bool Eat(char c)
     {
-        if (c == _pos)
+        if (c == Current)
         {
+            Next();
             return true;
         }
         return false;
@@ -23,21 +24,75 @@ public class Parser
     private char Current => _pos < _expression.Length ? _expression[_pos] : '\0';
     private void Next() => _pos++;
     
-    private NTree ParseExpression() => ParseExpr();
+    public NTree ParseExpression() => ParseExpr();
 
     private NTree ParseExpr()
     {
+        var node = ParseTerm();
         
+        while (true)
+        {
+            if (Eat('+'))
+            {
+                var right = ParseTerm();
+                var op = new AddOperator();
+                var newNode = new NTree(op);
+                newNode.AddLeft(node);
+                newNode.AddRight(right);
+                node = newNode;
+            }
+            else if (Eat('-'))
+            {
+                var right = ParseTerm();
+                var op = new SubOperator();
+                var newNode = new NTree(op);
+                newNode.AddLeft(node);
+                newNode.AddRight(right);
+                node = newNode;
+            }
+            else break;
+        }
+        return node;
     }
 
     private NTree ParseTerm()
     {
+        var node = ParseFactor();
         
+        while (true)
+        {
+            if (Eat('*'))
+            {
+                var right = ParseFactor();
+                var op = new MulOperator();
+                var newNode = new NTree(op);
+                newNode.AddLeft(node);
+                newNode.AddRight(right);
+                node = newNode;
+            }
+            else if (Eat('/'))
+            {
+                var right = ParseFactor();
+                var op = new DivOperator();
+                var newNode = new NTree(op);
+                newNode.AddLeft(node);
+                newNode.AddRight(right);
+                node = newNode;
+            }
+            else break;
+        }
+        return node;
     }
 
     private NTree ParseFactor()
     {
-        
+        if (Eat('('))
+        {
+            var node = ParseExpr();
+            if (!Eat(')')) throw new Exception("нужна закрывающая скобка");
+            return node;
+        }
+        return ParseNumber();;
     }
 
     private NTree ParseNumber()
