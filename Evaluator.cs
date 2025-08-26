@@ -6,6 +6,10 @@ public class Evaluator
         if (node.Left == null && node.Right == null)
             return node.Value.Evaluate();
         
+        if (node.Right == null)
+            return node.Value.Evaluate(EvaluatingRecursion(node.Left));
+        
+        
         double left = EvaluatingRecursion(node.Left);
         double right = EvaluatingRecursion(node.Right);
 

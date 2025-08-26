@@ -89,6 +89,19 @@ public class Parser
             var node = ParseExpression();
             if (!IsThisCharCurrent(')')) throw new Exception("нужна закрывающая скобка");
             return node;
+        } 
+        if (IsThisCharCurrent('s'))
+        {
+            while (!IsThisCharCurrent('('))
+            {
+                Next();
+            }
+            var node = ParseFactor(); 
+            var fc = new SinFunction();
+            var newNode = new BinaryTree(fc);
+            newNode.AddLeft(node);
+            node = newNode;
+            return node;
         }
         return ParseNumber();;
     }

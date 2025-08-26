@@ -3,6 +3,7 @@ namespace Calculator1;
 public interface INodeValue
 {
     double Evaluate(double left, double right); 
+    double Evaluate(double left);
     double Evaluate();
 }
 
@@ -18,6 +19,8 @@ public class NumbValue : INodeValue
     public double Evaluate() => _value;
     public double Evaluate(double left, double right) 
         => throw new NotSupportedException("это не число");
+    public double Evaluate(double left) 
+        => throw new NotSupportedException("это не число");
 }
 
 
@@ -27,6 +30,24 @@ public abstract class BinaryOperator : INodeValue
     public double Evaluate(double left, double right) => Operate(left, right);
     public double Evaluate() 
         => throw new NotSupportedException("это не оператор");
+    public double Evaluate(double left) 
+        => throw new NotSupportedException("это не оператор");
+}
+
+public abstract class FunctionOperator : INodeValue
+{
+    public abstract double Operate(double left);
+    public double Evaluate(double left) => Operate(left);
+    public double Evaluate(double left, double right)
+        => throw new NotSupportedException("это не оператор");
+    public double Evaluate() 
+        => throw new NotSupportedException("это не оператор");
+    
+}
+
+public class SinFunction : FunctionOperator
+{
+    public override double Operate(double left) => Math.Sin(left);
 }
 
 public class AddOperator : BinaryOperator
