@@ -20,6 +20,7 @@ public class NumbValue : INodeValue
         => throw new NotSupportedException("это не число");
 }
 
+
 public abstract class BinaryOperator : INodeValue
 {
     public abstract double Operate(double left, double right);

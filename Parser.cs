@@ -11,7 +11,7 @@ public class Parser
         _pos = 0;
     }
 
-    private bool Eat(char c)
+    private bool IsThisCharCurrent(char c)
     {
         if (c == Current)
         {
@@ -23,29 +23,27 @@ public class Parser
     
     private char Current => _pos < _expression.Length ? _expression[_pos] : '\0';
     private void Next() => _pos++;
-    
-    public NTree ParseExpression() => ParseExpr();
 
-    private NTree ParseExpr()
+    public BinaryTree ParseExpression()
     {
         var node = ParseTerm();
         
         while (true)
         {
-            if (Eat('+'))
+            if (IsThisCharCurrent('+'))
             {
                 var right = ParseTerm();
                 var op = new AddOperator();
-                var newNode = new NTree(op);
+                var newNode = new BinaryTree(op);
                 newNode.AddLeft(node);
                 newNode.AddRight(right);
                 node = newNode;
             }
-            else if (Eat('-'))
+            else if (IsThisCharCurrent('-'))
             {
                 var right = ParseTerm();
                 var op = new SubOperator();
-                var newNode = new NTree(op);
+                var newNode = new BinaryTree(op);
                 newNode.AddLeft(node);
                 newNode.AddRight(right);
                 node = newNode;
@@ -55,26 +53,26 @@ public class Parser
         return node;
     }
 
-    private NTree ParseTerm()
+    private BinaryTree ParseTerm()
     {
         var node = ParseFactor();
         
         while (true)
         {
-            if (Eat('*'))
+            if (IsThisCharCurrent('*'))
             {
                 var right = ParseFactor();
                 var op = new MulOperator();
-                var newNode = new NTree(op);
+                var newNode = new BinaryTree(op);
                 newNode.AddLeft(node);
                 newNode.AddRight(right);
                 node = newNode;
             }
-            else if (Eat('/'))
+            else if (IsThisCharCurrent('/'))
             {
                 var right = ParseFactor();
                 var op = new DivOperator();
-                var newNode = new NTree(op);
+                var newNode = new BinaryTree(op);
                 newNode.AddLeft(node);
                 newNode.AddRight(right);
                 node = newNode;
@@ -84,18 +82,18 @@ public class Parser
         return node;
     }
 
-    private NTree ParseFactor()
+    private BinaryTree ParseFactor()
     {
-        if (Eat('('))
+        if (IsThisCharCurrent('('))
         {
-            var node = ParseExpr();
-            if (!Eat(')')) throw new Exception("нужна закрывающая скобка");
+            var node = ParseExpression();
+            if (!IsThisCharCurrent(')')) throw new Exception("нужна закрывающая скобка");
             return node;
         }
         return ParseNumber();;
     }
 
-    private NTree ParseNumber()
+    private BinaryTree ParseNumber()
     {
         int start = _pos;
 
@@ -105,7 +103,7 @@ public class Parser
         if (start == _pos) throw new Exception("кривое выражение");
         
         double value = double.Parse(_expression.Substring(start, _pos - start), System.Globalization.CultureInfo.InvariantCulture);
-        var numb = new NTree(new NumbValue(value));
+        var numb = new BinaryTree(new NumbValue(value));
         
         return numb;
     }

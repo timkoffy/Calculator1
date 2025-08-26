@@ -1,14 +1,14 @@
 namespace Calculator1;
 
-public class NTree
+public class BinaryTree
 {
     public INodeValue Value { get; }
-    public NTree Left { get; private set; }
-    public NTree Right { get; private set; }
+    public BinaryTree Left { get; private set; }
+    public BinaryTree Right { get; private set; }
 
-    public NTree(INodeValue value) => Value = value;
+    public BinaryTree(INodeValue value) => Value = value;
     
-    public void AddLeft(NTree child) => Left = child;
+    public void AddLeft(BinaryTree child) => Left = child;
 
-    public void AddRight(NTree child) => Right = child;
+    public void AddRight(BinaryTree child) => Right = child;
 }
