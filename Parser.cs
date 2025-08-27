@@ -66,7 +66,7 @@ public class Parser
                 var newNode = new BinaryTree(op);
                 newNode.AddLeft(node);
                 newNode.AddRight(right);
-                node = newNode;
+                node = newNode; 
             }
             else if (IsThisCharCurrent('/'))
             {
@@ -96,7 +96,8 @@ public class Parser
             {
                 Next();
             }
-            var node = ParseFactor(); 
+            var node = ParseExpression(); 
+            if (!IsThisCharCurrent(')')) throw new Exception("нужна закрывающая скобка");
             var fc = new SinFunction();
             var newNode = new BinaryTree(fc);
             newNode.AddLeft(node);
