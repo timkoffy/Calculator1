@@ -110,6 +110,7 @@ public class Parser
     private BinaryTree ParseNumber()
     {
         int start = _pos;
+        IsThisCharCurrent('-');
 
         while (char.IsDigit(Current) || Current == '.')
             Next();
@@ -117,6 +118,7 @@ public class Parser
         if (start == _pos) throw new Exception("кривое выражение");
         
         double value = double.Parse(_expression.Substring(start, _pos - start), System.Globalization.CultureInfo.InvariantCulture);
+        
         var numb = new BinaryTree(new NumbValue(value));
         
         return numb;
