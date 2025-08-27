@@ -87,7 +87,7 @@ public class Parser
         if (IsThisCharCurrent('('))
         {
             var node = ParseExpression();
-            if (!IsThisCharCurrent(')')) throw new Exception("нужна закрывающая скобка");
+            if (!IsThisCharCurrent(')')) throw new Exception("missing closing parenthesis");
             return node;
         } 
         if (IsThisCharCurrent('s'))
@@ -97,7 +97,7 @@ public class Parser
                 Next();
             }
             var node = ParseExpression(); 
-            if (!IsThisCharCurrent(')')) throw new Exception("нужна закрывающая скобка");
+            if (!IsThisCharCurrent(')')) throw new Exception("missing closing parenthesis");
             var fc = new SinFunction();
             var newNode = new BinaryTree(fc);
             newNode.AddLeft(node);
@@ -115,7 +115,7 @@ public class Parser
         while (char.IsDigit(Current) || Current == '.')
             Next();
 
-        if (start == _pos) throw new Exception("кривое выражение");
+        if (start == _pos) throw new Exception("invalid expression");
         
         double value = double.Parse(_expression.Substring(start, _pos - start), System.Globalization.CultureInfo.InvariantCulture);
         

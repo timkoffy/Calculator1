@@ -18,9 +18,9 @@ public class NumbValue : INodeValue
 
     public double Evaluate() => _value;
     public double Evaluate(double left, double right) 
-        => throw new NotSupportedException("это не число");
+        => throw new NotSupportedException("not a number");
     public double Evaluate(double left) 
-        => throw new NotSupportedException("это не число");
+        => throw new NotSupportedException("not a number");
 }
 
 
@@ -29,9 +29,9 @@ public abstract class BinaryOperator : INodeValue
     public abstract double Operate(double left, double right);
     public double Evaluate(double left, double right) => Operate(left, right);
     public double Evaluate() 
-        => throw new NotSupportedException("это не оператор");
+        => throw new NotSupportedException("not an operator");
     public double Evaluate(double left) 
-        => throw new NotSupportedException("это не оператор");
+        => throw new NotSupportedException("not an operator");
 }
 
 public abstract class FunctionOperator : INodeValue
@@ -39,9 +39,9 @@ public abstract class FunctionOperator : INodeValue
     public abstract double Operate(double left);
     public double Evaluate(double left) => Operate(left);
     public double Evaluate(double left, double right)
-        => throw new NotSupportedException("это не оператор");
+        => throw new NotSupportedException("not a function");
     public double Evaluate() 
-        => throw new NotSupportedException("это не оператор");
+        => throw new NotSupportedException("not a function");
     
 }
 
