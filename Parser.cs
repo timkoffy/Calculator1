@@ -24,6 +24,21 @@ public class Parser
     private char Current => _pos < _expression.Length ? _expression[_pos] : '\0';
     private void Next() => _pos++;
 
+    private BinaryTree CreateNode(INodeValue op, BinaryTree left, BinaryTree? right)
+    {
+        var newNode = new BinaryTree(op);
+        newNode.AddLeft(left);
+        if (right != null) newNode.AddRight(right);
+        return newNode;
+    }
+
+    private string FunctionIdentifier()
+    {
+        int start = _pos;
+        while (char.IsLetter(Current)) Next();
+        return _expression.Substring(start, _pos - start);
+    }
+    
     public BinaryTree ParseExpression()
     {
         var node = ParseTerm();
@@ -33,20 +48,12 @@ public class Parser
             if (IsThisCharCurrent('+'))
             {
                 var right = ParseTerm();
-                var op = new AddOperator();
-                var newNode = new BinaryTree(op);
-                newNode.AddLeft(node);
-                newNode.AddRight(right);
-                node = newNode;
+                node = CreateNode(new AddOperator(), node, right);
             }
             else if (IsThisCharCurrent('-'))
             {
                 var right = ParseTerm();
-                var op = new SubOperator();
-                var newNode = new BinaryTree(op);
-                newNode.AddLeft(node);
-                newNode.AddRight(right);
-                node = newNode;
+                node = CreateNode(new SubOperator(), node, right);
             }
             else break;
         }
@@ -62,20 +69,12 @@ public class Parser
             if (IsThisCharCurrent('*'))
             {
                 var right = ParseFactor();
-                var op = new MulOperator();
-                var newNode = new BinaryTree(op);
-                newNode.AddLeft(node);
-                newNode.AddRight(right);
-                node = newNode; 
+                node = CreateNode(new MulOperator(), node, right);
             }
             else if (IsThisCharCurrent('/'))
             {
                 var right = ParseFactor();
-                var op = new DivOperator();
-                var newNode = new BinaryTree(op);
-                newNode.AddLeft(node);
-                newNode.AddRight(right);
-                node = newNode;
+                node = CreateNode(new DivOperator(), node, right);
             }
             else break;
         }
@@ -89,21 +88,24 @@ public class Parser
             var node = ParseExpression();
             if (!IsThisCharCurrent(')')) throw new Exception("missing closing parenthesis");
             return node;
-        } 
-        if (IsThisCharCurrent('s'))
+        }
+
+        if (char.IsLetter(Current))
         {
-            while (!IsThisCharCurrent('('))
-            {
-                Next();
-            }
+            string func = FunctionIdentifier();
+            while (!IsThisCharCurrent('(')) Next(); 
             var node = ParseExpression(); 
             if (!IsThisCharCurrent(')')) throw new Exception("missing closing parenthesis");
-            var fc = new SinFunction();
-            var newNode = new BinaryTree(fc);
-            newNode.AddLeft(node);
-            node = newNode;
-            return node;
+
+            return func switch
+            {
+                "sin" => CreateNode(new SinFunction(), node, null),
+                "cos" => CreateNode(new CosFunction(), node, null),
+                "tan" => CreateNode(new TanFunction(), node, null),
+                "ctg" => CreateNode(new CtgFunction(), node, null),
+            };
         }
+        
         return ParseNumber();;
     }
 

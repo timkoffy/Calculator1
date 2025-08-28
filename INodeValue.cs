@@ -40,12 +40,24 @@ public class SinFunction : FunctionOperator
 {
     public override double Evaluate(double operand) => Math.Sin(operand);
 }
+public class CosFunction : FunctionOperator
+{
+    public override double Evaluate(double operand) => Math.Cos(operand);
+}
+public class TanFunction : FunctionOperator
+{
+    public override double Evaluate(double operand) => Math.Tan(operand);
+}
+public class CtgFunction : FunctionOperator
+{
+    public override double Evaluate(double operand) => 1/Math.Tan(operand);
+}
+
 
 public class AddOperator : BinaryOperator
 {
     public override double Evaluate(double left, double right) => left + right;
 }
-
 public class SubOperator : BinaryOperator
 {
     public override double Evaluate(double left, double right) => left - right;
